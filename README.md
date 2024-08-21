@@ -1,3 +1,39 @@
+# Index
+
+- [Building a Online Payment Platform](#building-a-online-payment-platform)
+    * [Background](#background)
+    * [Entities Involved:](#entities-involved)
+    * [Requirements:](#requirements)
+    * [Deliverables:](#deliverables)
+    * [Considerations:](#considerations)
+    * [Extra:](#extra)
+- [Challenge Documentation](#challenge-documentation)
+    * [First steps](#first-steps)
+    * [Setting up different scenarios](#setting-up-different-scenarios)
+    * [Testing the application](#testing-the-application)
+    * [IMPORTANT NOTES](#important-notes)
+    * [Project structure](#project-structure)
+        + [Application folder](#application-folder)
+        + [Payments APP structure](#payments-app-structure)
+        + [Bank APP structure](#bank-app-structure)
+        + [Areas for improvement](#areas-for-improvement)
+        + [Things that I consider that are interesting](#things-that-i-consider-that-are-interesting)
+            - [* Idempotency Key](#-idempotency-key)
+        + [Architecture](#architecture)
+        + [Assumptions](#assumptions)
+        + [Data models](#data-models)
+        + [cURLs](#curls)
+            - [Bank](#bank)
+              + [GET - /ping ](#get-ping)
+              + [POST - /pay ](#post-pay)
+            - [Payments](#payments)
+              + [GET - /ping](#get-ping-1)
+              + [POST - /pay ](#post-pay-1)
+                * [PUT - /payments/{payment_id}/refund](#put-paymentspayment_idrefund)
+                * [GET - /payments (fetch every payment)](#get-payments-fetch-every-payment)
+                * [GET - /payments/{payment_id} (fetch a given payment id)](#get-paymentspayment_id-fetch-a-given-payment-id)
+                * [GET - /customers/{customer_id}/payments (fetch every payment for a given customer)](#get-customerscustomer_idpayments-fetch-every-payment-for-a-given-customer)
+
 # Building a Online Payment Platform
 
 ## Background
@@ -79,7 +115,7 @@ There are 2 folders in the root:
 - application: this is where the application code is located
 - swagger: this is where the swagger file is located
 
-### Application folder:
+### Application folder
 This is where the application code split into 3 different type of folders:
 - Shared code: everything that's not into bank-app or payments-app then it is code that lives there so it can be reused easily
 - Bank APP: Mock for bank simulator
