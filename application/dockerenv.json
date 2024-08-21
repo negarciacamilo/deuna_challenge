@@ -1,0 +1,13 @@
+{
+  "PAYMENTS_DSN":"postgres://deuna:challenge@db_payments:5432/paymentsdb?sslmode=disable",
+  "PAYMENTS_PORT": ":8080",
+  "BANK_PORT": ":8080",
+
+  "AUTH_TOKEN_IS_VALID": true,
+  "CLIENT_HAS_ENOUGH_BALANCE": true,
+  "CARD_HASH_IS_VALID": true,
+  "CLIENT_HAS_EXCEEDED_LIMIT": false,
+  "BANK_TX_FAILED": false,
+
+  "BANK_API_URL": "http://bank:8888"
+}

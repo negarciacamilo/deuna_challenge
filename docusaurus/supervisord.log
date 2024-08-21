@@ -1,0 +1,65 @@
+2024-08-20 03:53:43,033 INFO Set uid to user 0 succeeded
+2024-08-20 03:53:43,038 INFO supervisord started with pid 10
+2024-08-20 03:53:44,043 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 03:53:44,047 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 03:53:45,049 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 03:54:02,985 INFO Set uid to user 0 succeeded
+2024-08-20 03:54:02,990 INFO supervisord started with pid 10
+2024-08-20 03:54:04,013 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 03:54:04,021 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 03:54:05,024 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 15:21:14,726 INFO Set uid to user 0 succeeded
+2024-08-20 15:21:14,730 INFO supervisord started with pid 10
+2024-08-20 15:21:15,744 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 15:21:15,758 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 15:21:16,765 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:19:25,995 INFO Set uid to user 0 succeeded
+2024-08-20 19:19:26,000 INFO supervisord started with pid 9
+2024-08-20 19:19:27,013 INFO spawned: 'docusaurus' with pid 10
+2024-08-20 19:19:27,025 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:19:28,028 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:30:32,158 INFO Set uid to user 0 succeeded
+2024-08-20 19:30:32,163 INFO supervisord started with pid 10
+2024-08-20 19:30:33,178 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 19:30:33,186 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:30:34,194 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:32:11,249 INFO Set uid to user 0 succeeded
+2024-08-20 19:32:11,254 INFO supervisord started with pid 10
+2024-08-20 19:32:12,260 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 19:32:12,271 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:32:13,279 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:43:56,438 INFO Set uid to user 0 succeeded
+2024-08-20 19:43:56,443 INFO supervisord started with pid 10
+2024-08-20 19:43:57,452 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 19:43:57,466 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:43:58,472 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:44:55,714 INFO Set uid to user 0 succeeded
+2024-08-20 19:44:55,720 INFO supervisord started with pid 10
+2024-08-20 19:44:56,733 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 19:44:56,743 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:44:57,747 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 19:46:39,737 INFO Set uid to user 0 succeeded
+2024-08-20 19:46:39,744 INFO supervisord started with pid 9
+2024-08-20 19:46:40,752 INFO spawned: 'docusaurus' with pid 10
+2024-08-20 19:46:40,768 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 19:46:41,771 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-20 20:06:17,820 INFO Set uid to user 0 succeeded
+2024-08-20 20:06:17,824 INFO supervisord started with pid 10
+2024-08-20 20:06:18,840 INFO spawned: 'docusaurus' with pid 11
+2024-08-20 20:06:18,855 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-20 20:06:19,861 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-21 03:47:46,894 INFO Set uid to user 0 succeeded
+2024-08-21 03:47:46,900 INFO supervisord started with pid 10
+2024-08-21 03:47:47,923 INFO spawned: 'docusaurus' with pid 11
+2024-08-21 03:47:48,945 INFO success: docusaurus entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-08-21 03:47:48,952 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-21 04:02:04,051 INFO Set uid to user 0 succeeded
+2024-08-21 04:02:04,058 INFO supervisord started with pid 10
+2024-08-21 04:02:05,079 INFO spawned: 'docusaurus' with pid 11
+2024-08-21 04:02:05,092 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-21 04:02:06,100 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly
+2024-08-21 04:03:25,590 INFO Set uid to user 0 succeeded
+2024-08-21 04:03:25,595 INFO supervisord started with pid 10
+2024-08-21 04:03:26,612 INFO spawned: 'docusaurus' with pid 11
+2024-08-21 04:03:26,628 INFO exited: docusaurus (exit status 127; not expected)
+2024-08-21 04:03:27,632 INFO gave up: docusaurus entered FATAL state, too many start retries too quickly

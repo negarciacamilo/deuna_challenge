@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  bank:
+    build:
+      context: ./application
+      dockerfile: Dockerfile.bank
+    container_name: bank-app
+    environment:
+      - ENVIRONMENT=docker
+    ports:
+      - "8888:8080"
+    networks:
+      - app-network
+
+  payments:
+    build:
+      context: ./application
+      dockerfile: Dockerfile.payments
+    container_name: payments-app
+    environment:
+      - ENVIRONMENT=docker
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - db_payments
+
+  db_payments:
+    image: postgres:latest
+    container_name: db_payments
+    environment:
+      POSTGRES_DB: paymentsdb
+      POSTGRES_USER: deuna
+      POSTGRES_PASSWORD: challenge
+    volumes:
+      - db_payments_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  docusaurus:
+    image: awesometic/docusaurus:latest
+    container_name: docusaurus
+    ports:
+      - "80:80"
+    volumes:
+      - ./docusaurus:/docusaurus
+    environment:
+      TARGET_UID: 1000
+      TARGET_GID: 1000
+      AUTO_UPDATE: "true"
+      TEMPLATE: "classic"
+    restart: unless-stopped
+    command: docusaurus start /docusaurus
+    networks:
+      - app-network
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    container_name: swagger
+    ports:
+      - "8082:8080"
+    environment:
+      - SWAGGER_JSON=/usr/share/nginx/html/swagger.json
+    volumes:
+      - ./swagger/swagger.json:/usr/share/nginx/html/swagger.json
+    networks:
+      - app-network
+
+volumes:
+  db_payments_data:
+  db_bank_data:
+
+networks:
+  app-network:
+    driver: bridge
