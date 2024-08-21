@@ -9,7 +9,7 @@ import (
 
 type Repository interface {
 	AddPayment(ctx *d.ContextInformation, payment *dbd.Payment) apierrors.ApiError
-	ChangePaymentStatus(ctx *d.ContextInformation, payment dbd.Payment) apierrors.ApiError
+	ChangePaymentStatus(ctx *d.ContextInformation, payment *dbd.Payment) apierrors.ApiError
 	GetAllPayments(ctx *d.ContextInformation) (*[]dbd.Payment, apierrors.ApiError)
 	GetPaymentByID(ctx *d.ContextInformation, id uint64) (*dbd.Payment, apierrors.ApiError)
 	GetCustomerPayments(ctx *d.ContextInformation, id uint64) (*[]dbd.Payment, apierrors.ApiError)
@@ -34,7 +34,7 @@ func (r *repository) AddPayment(ctx *d.ContextInformation, payment *dbd.Payment)
 	return nil
 }
 
-func (r *repository) ChangePaymentStatus(ctx *d.ContextInformation, payment dbd.Payment) apierrors.ApiError {
+func (r *repository) ChangePaymentStatus(ctx *d.ContextInformation, payment *dbd.Payment) apierrors.ApiError {
 	_, err := r.db.GetDB().NewUpdate().Model(payment).Where("id = ?", payment.ID).Exec(ctx.GetCtx())
 	if err != nil {
 		return r.db.HandleDBError(ctx, "payments", database.Updating, err)

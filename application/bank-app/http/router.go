@@ -26,7 +26,8 @@ func mapRoutes(router *gin.Engine) {
 
 	router.GET("/ping", ping)
 	router.POST("/pay", handler.Pay)
-	router.PUT("/reversal/:paymentID", handler.PerformReversal)
+	router.PUT("/payments/:paymentID/reversal", handler.PerformReversal)
+	router.PUT("/payments/:paymentID/refund", handler.RefundPayment)
 }
 
 func ping(c *gin.Context) {

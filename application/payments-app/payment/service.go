@@ -17,6 +17,7 @@ type Service interface {
 	GetPaymentByID(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError)
 	GetCustomerPayments(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError)
 	GetAllPayments(ctx *d.ContextInformation) (response.Response, apierrors.ApiError)
+	RefundPayment(ctx *d.ContextInformation, paymentID uint64) (response.Response, apierrors.ApiError)
 }
 
 type service struct {
@@ -41,24 +42,24 @@ func (s *service) Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) 
 		Code:       defines.APPROVE_CODE,
 	}
 
-	paymentID, apierr := s.bankRepository.Pay(ctx, payment)
+	operationID, apierr := s.bankRepository.Pay(ctx, payment)
 	if apierr != nil {
 		code := s.bankRepository.ParseAPIError(apierr)
 		p.Code = code
 		p.Status = defines.REJECTED_STATUS
 	} else {
-		p.PaymentID = paymentID
+		p.OperationID = operationID
 	}
 
 	apierr = s.paymentRepository.AddPayment(ctx, p)
 	if apierr != nil && p.Status == defines.APPROVED_STATUS {
-		err := s.bankRepository.ReverseOperation(ctx, *paymentID)
+		err := s.bankRepository.ReverseOperation(ctx, *operationID)
 		// Best effort to reverse the payment
 		if err != nil {
 			logger.Error("error reversing payment", "payment-service-pay", err, ctx)
 		}
 		p.Status = defines.REVERSAL_STATUS
-		err = s.paymentRepository.ChangePaymentStatus(ctx, *p)
+		err = s.paymentRepository.ChangePaymentStatus(ctx, p)
 		if err != nil {
 			logger.Error("error changing payment status", "payment-service-pay", err, ctx)
 		}
@@ -93,4 +94,30 @@ func (s *service) GetAllPayments(ctx *d.ContextInformation) (response.Response, 
 	}
 
 	return response.New(http.StatusOK, payments), nil
+}
+
+func (s *service) RefundPayment(ctx *d.ContextInformation, paymentID uint64) (response.Response, apierrors.ApiError) {
+	payment, apierr := s.paymentRepository.GetPaymentByID(ctx, paymentID)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	if payment.Status != defines.APPROVED_STATUS {
+		return nil, apierrors.NewBadRequestApiError("can't refund an unapproved payment")
+	}
+
+	apierr = s.bankRepository.RefundPayment(ctx, *payment.OperationID)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	payment.Status = defines.REFUNDED_STATUS
+	payment.Code = "0008"
+	apierr = s.paymentRepository.ChangePaymentStatus(ctx, payment)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	return response.New(http.StatusOK, payment), nil
+
 }

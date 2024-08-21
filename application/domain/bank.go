@@ -1,5 +1,5 @@
 package domain
 
 type BankResponse struct {
-	PaymentID string `json:"paymentId"`
+	OperationID string `json:"operation_id"`
 }

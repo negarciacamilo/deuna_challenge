@@ -16,6 +16,7 @@ import (
 type Handler interface {
 	Pay(c *gin.Context)
 	PerformReversal(c *gin.Context)
+	RefundPayment(c *gin.Context)
 }
 
 type handler struct {
@@ -61,10 +62,15 @@ func (h *handler) Pay(c *gin.Context) {
 	}
 
 	id, _ := uuid.NewV7()
-	response.Respond(ctx, response.New(200, domain.BankResponse{PaymentID: id.String()}), nil)
+	response.Respond(ctx, response.New(200, domain.BankResponse{OperationID: id.String()}), nil)
 }
 
 func (h *handler) PerformReversal(c *gin.Context) {
+	ctx := context.GetContextInformation(c)
+	response.Respond(ctx, response.New(200, nil), nil)
+}
+
+func (h *handler) RefundPayment(c *gin.Context) {
 	ctx := context.GetContextInformation(c)
 	response.Respond(ctx, response.New(200, nil), nil)
 }

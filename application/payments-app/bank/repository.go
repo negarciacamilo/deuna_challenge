@@ -14,8 +14,9 @@ import (
 
 type Repository interface {
 	Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) (*string, apierrors.ApiError)
-	ReverseOperation(ctx *d.ContextInformation, paymentID string) apierrors.ApiError
+	ReverseOperation(ctx *d.ContextInformation, operationID string) apierrors.ApiError
 	ParseAPIError(apierr apierrors.ApiError) string
+	RefundPayment(ctx *d.ContextInformation, operationID string) apierrors.ApiError
 }
 
 type repository struct {
@@ -48,25 +49,46 @@ func (r *repository) Pay(ctx *d.ContextInformation, payment domain.PaymentReques
 
 	var bankResponse d.BankResponse
 	_ = json.Unmarshal(res.Body(), &bankResponse)
-	return &bankResponse.PaymentID, nil
+	return &bankResponse.OperationID, nil
 }
 
-func (r *repository) ReverseOperation(ctx *d.ContextInformation, paymentID string) apierrors.ApiError {
+func (r *repository) ReverseOperation(ctx *d.ContextInformation, operationID string) apierrors.ApiError {
 	baseUrl := viper.GetString("BANK_API_URL")
-	url := fmt.Sprintf("%s/reversal/%d", baseUrl, paymentID)
+	url := fmt.Sprintf("%s/payments/%s/reversal", baseUrl, operationID)
 
 	res, err := r.httpClient.R().EnableTrace().Put(url)
 	if err != nil {
 		apierr := apierrors.NewInternalServerApiError("something happened reversing", err)
-		logger.Error(apierr.Message(), "reverse-operation", apierr, ctx, map[string]any{"paymentID": paymentID})
+		logger.Error(apierr.Message(), "reverse-operation", apierr, ctx, map[string]any{"operation_id": operationID})
 		return apierr
 	}
 
 	if res.IsError() {
 		var apierr apierrors.ApiError
 		_ = json.Unmarshal(res.Body(), apierr)
-		logger.Error(apierr.Message(), "reverse-operation", apierr, ctx, map[string]any{"body": string(res.Body()), "paymentID": paymentID})
+		logger.Error(apierr.Message(), "reverse-operation", apierr, ctx, map[string]any{"body": string(res.Body()), "operation_id": operationID})
 		return apierrors.NewApiError("can't perform the reversal", apierr.Error(), res.StatusCode(), nil)
+	}
+
+	return nil
+}
+
+func (r *repository) RefundPayment(ctx *d.ContextInformation, operationID string) apierrors.ApiError {
+	baseUrl := viper.GetString("BANK_API_URL")
+	url := fmt.Sprintf("%s/payments/%s/refund", baseUrl, operationID)
+
+	res, err := r.httpClient.R().EnableTrace().Put(url)
+	if err != nil {
+		apierr := apierrors.NewInternalServerApiError("something happened refunding", err)
+		logger.Error(apierr.Message(), "refund-operation", apierr, ctx, map[string]any{"operation_id": operationID})
+		return apierr
+	}
+
+	if res.IsError() {
+		var apierr apierrors.ApiError
+		_ = json.Unmarshal(res.Body(), apierr)
+		logger.Error(apierr.Message(), "refund-operation", apierr, ctx, map[string]any{"body": string(res.Body()), "operation_id": operationID})
+		return apierrors.NewApiError("can't perform the refund", apierr.Error(), res.StatusCode(), nil)
 	}
 
 	return nil

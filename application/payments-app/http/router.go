@@ -40,6 +40,7 @@ func mapRoutes(router *gin.Engine) {
 	router.GET("/payments/:payment_id", paymentsHandler.GetPaymentByID)
 	router.GET("/customers/:customer_id/payments", paymentsHandler.GetCustomerPayments)
 	router.GET("/payments", paymentsHandler.GetAllPayments)
+	router.PUT("/payments/:payment_id/refund", paymentsHandler.RefundPaymentByID)
 	router.GET("/ping", ping)
 }
 

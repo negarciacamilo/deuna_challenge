@@ -12,6 +12,7 @@ type Handler interface {
 	GetPaymentByID(c *gin.Context)
 	GetAllPayments(c *gin.Context)
 	GetCustomerPayments(c *gin.Context)
+	RefundPaymentByID(c *gin.Context)
 }
 
 type handler struct {
@@ -73,4 +74,16 @@ func (h *handler) GetAllPayments(c *gin.Context) {
 	ctx := context.GetContextInformation(c)
 	p, apierr := h.service.GetAllPayments(ctx)
 	response.Respond(ctx, p, apierr)
+}
+
+func (h *handler) RefundPaymentByID(c *gin.Context) {
+	ctx := context.GetContextInformation(c)
+	paymentID, apierr := context.ParseParamToUInt(ctx, "payment_id")
+	if apierr != nil {
+		response.Respond(ctx, nil, apierr)
+		return
+	}
+
+	res, apierr := h.service.RefundPayment(ctx, paymentID)
+	response.Respond(ctx, res, apierr)
 }
