@@ -18,7 +18,7 @@ func NewRouter() *gin.Engine {
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 	router.Use(gin.Logger())
 	router.Use(logRequestHandler())
-	router.Use(generateContext())
+	router.Use(GenerateContext())
 	router.NoRoute(noRouteHandler)
 	router.Use(idempotencyKeyCheck())
 	router.Use(AuthorizeClient())

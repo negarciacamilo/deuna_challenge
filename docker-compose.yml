@@ -46,23 +46,6 @@ services:
       timeout: 5s
       retries: 5
 
-  docusaurus:
-    image: awesometic/docusaurus:latest
-    container_name: docusaurus
-    ports:
-      - "80:80"
-    volumes:
-      - ./docusaurus:/docusaurus
-    environment:
-      TARGET_UID: 1000
-      TARGET_GID: 1000
-      AUTO_UPDATE: "true"
-      TEMPLATE: "classic"
-    restart: unless-stopped
-    command: docusaurus start /docusaurus
-    networks:
-      - app-network
-
   swagger-ui:
     image: swaggerapi/swagger-ui
     container_name: "swagger-ui-container"

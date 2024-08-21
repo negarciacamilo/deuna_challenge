@@ -32,7 +32,7 @@ const (
 	OutcomingResponse = "Outcoming response"
 )
 
-func generateContext() gin.HandlerFunc {
+func GenerateContext() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Keys = make(map[string]interface{})
 		ctx := &domain.ContextInformation{RequestInfo: generateRequestInformation(c.Request)}
