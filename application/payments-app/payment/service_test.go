@@ -1,6 +1,7 @@
 package payment
 
 import (
+	"github.com/google/uuid"
 	"github.com/negarciacamilo/deuna_challenge/application/apierrors"
 	d "github.com/negarciacamilo/deuna_challenge/application/domain"
 	"github.com/negarciacamilo/deuna_challenge/application/domain/database"
@@ -214,4 +215,47 @@ func TestGetAllPayments(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRefundPayment(t *testing.T) {
+	id, _ := uuid.NewV7()
+	i := id.String()
+	tests := []struct {
+		name        string
+		expectedErr apierrors.ApiError
+		setupMocks  func(paymentRepoMock *RepositoryMock, bankRepo *bank.RepositoryMock)
+	}{
+		{
+			name:        "Happy path",
+			expectedErr: nil,
+			setupMocks: func(paymentRepoMock *RepositoryMock, bankRepo *bank.RepositoryMock) {
+				paymentRepoMock.On("GetPaymentByID", mock.Anything, mock.Anything).Return(&database.Payment{Status: defines.APPROVED_STATUS, OperationID: &i}, nil)
+				bankRepo.On("RefundPayment", mock.Anything, mock.Anything).Return(nil)
+				paymentRepoMock.On("ChangePaymentStatus", mock.Anything, mock.Anything).Return(nil)
+			},
+		},
+		{
+			name:        "Repository error",
+			expectedErr: apierrors.NewBadRequestApiError("test"),
+			setupMocks: func(paymentRepoMock *RepositoryMock, bankRepo *bank.RepositoryMock) {
+				paymentRepoMock.On("GetPaymentByID", mock.Anything, mock.Anything).Return(nil, apierrors.NewBadRequestApiError("test"))
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			paymentRepoMock := new(RepositoryMock)
+			bankRepo := new(bank.RepositoryMock)
+			tt.setupMocks(paymentRepoMock, bankRepo)
+
+			paymentService := NewService(bankRepo, paymentRepoMock)
+			payments, err := paymentService.RefundPayment(d.TestContext(), 1)
+			require.Equal(t, tt.expectedErr, err)
+			if tt.expectedErr == nil {
+				require.Equal(t, defines.REFUNDED_STATUS, payments.Response().(*database.Payment).Status)
+			}
+		})
+	}
+
 }
