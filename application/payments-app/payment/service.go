@@ -14,6 +14,9 @@ import (
 
 type Service interface {
 	Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) (response.Response, apierrors.ApiError)
+	GetPaymentByID(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError)
+	GetCustomerPayments(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError)
+	GetAllPayments(ctx *d.ContextInformation) (response.Response, apierrors.ApiError)
 }
 
 type service struct {
@@ -63,4 +66,31 @@ func (s *service) Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) 
 	}
 
 	return response.New(http.StatusCreated, p), nil
+}
+
+func (s *service) GetPaymentByID(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError) {
+	payments, apierr := s.paymentRepository.GetPaymentByID(ctx, id)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	return response.New(http.StatusOK, payments), nil
+}
+
+func (s *service) GetCustomerPayments(ctx *d.ContextInformation, id uint64) (response.Response, apierrors.ApiError) {
+	payments, apierr := s.paymentRepository.GetCustomerPayments(ctx, id)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	return response.New(http.StatusOK, payments), nil
+}
+
+func (s *service) GetAllPayments(ctx *d.ContextInformation) (response.Response, apierrors.ApiError) {
+	payments, apierr := s.paymentRepository.GetAllPayments(ctx)
+	if apierr != nil {
+		return nil, apierr
+	}
+
+	return response.New(http.StatusOK, payments), nil
 }

@@ -9,6 +9,9 @@ import (
 
 type Handler interface {
 	Pay(c *gin.Context)
+	GetPaymentByID(c *gin.Context)
+	GetAllPayments(c *gin.Context)
+	GetCustomerPayments(c *gin.Context)
 }
 
 type handler struct {
@@ -40,5 +43,34 @@ func (h *handler) Pay(c *gin.Context) {
 
 	p, apierr := h.service.Pay(ctx, paymentRequest)
 	response.Respond(ctx, p, apierr)
+}
 
+func (h *handler) GetPaymentByID(c *gin.Context) {
+	ctx := context.GetContextInformation(c)
+	paymentID, apierr := context.ParseParamToUInt(ctx, "payment_id")
+	if apierr != nil {
+		response.Respond(ctx, nil, apierr)
+		return
+	}
+
+	p, apierr := h.service.GetPaymentByID(ctx, paymentID)
+	response.Respond(ctx, p, apierr)
+}
+
+func (h *handler) GetCustomerPayments(c *gin.Context) {
+	ctx := context.GetContextInformation(c)
+	customerID, apierr := context.ParseParamToUInt(ctx, "customer_id")
+	if apierr != nil {
+		response.Respond(ctx, nil, apierr)
+		return
+	}
+
+	p, apierr := h.service.GetCustomerPayments(ctx, customerID)
+	response.Respond(ctx, p, apierr)
+}
+
+func (h *handler) GetAllPayments(c *gin.Context) {
+	ctx := context.GetContextInformation(c)
+	p, apierr := h.service.GetAllPayments(ctx)
+	response.Respond(ctx, p, apierr)
 }

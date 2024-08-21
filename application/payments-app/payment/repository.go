@@ -10,6 +10,9 @@ import (
 type Repository interface {
 	AddPayment(ctx *d.ContextInformation, payment *dbd.Payment) apierrors.ApiError
 	ChangePaymentStatus(ctx *d.ContextInformation, payment dbd.Payment) apierrors.ApiError
+	GetAllPayments(ctx *d.ContextInformation) (*[]dbd.Payment, apierrors.ApiError)
+	GetPaymentByID(ctx *d.ContextInformation, id uint64) (*dbd.Payment, apierrors.ApiError)
+	GetCustomerPayments(ctx *d.ContextInformation, id uint64) (*[]dbd.Payment, apierrors.ApiError)
 }
 
 type repository struct {
@@ -37,4 +40,52 @@ func (r *repository) ChangePaymentStatus(ctx *d.ContextInformation, payment dbd.
 		return r.db.HandleDBError(ctx, "payments", database.Updating, err)
 	}
 	return nil
+}
+
+func (r *repository) GetAllPayments(ctx *d.ContextInformation) (*[]dbd.Payment, apierrors.ApiError) {
+	var payments []dbd.Payment
+	err := r.db.GetDB().NewSelect().Model(&payments).
+		Relation("Customer").
+		Relation("Merchant").
+		Relation("Bank").Scan(ctx.GetCtx())
+	if err != nil {
+		return nil, r.db.HandleDBError(ctx, "payments", database.Fetching, err)
+	}
+
+	if len(payments) == 0 {
+		return nil, apierrors.NewNotFoundApiError("no payments found")
+	}
+
+	return &payments, nil
+}
+
+func (r *repository) GetPaymentByID(ctx *d.ContextInformation, id uint64) (*dbd.Payment, apierrors.ApiError) {
+	var payment dbd.Payment
+	err := r.db.GetDB().NewSelect().Model(&payment).Where("?TableAlias.id = ?", id).
+		Relation("Customer").
+		Relation("Merchant").
+		Relation("Bank").Scan(ctx.GetCtx())
+	if err != nil {
+		return nil, r.db.HandleDBError(ctx, "payment", database.Fetching, err)
+	}
+
+	return &payment, nil
+}
+
+func (r *repository) GetCustomerPayments(ctx *d.ContextInformation, id uint64) (*[]dbd.Payment, apierrors.ApiError) {
+	var payments []dbd.Payment
+	err := r.db.GetDB().NewSelect().Model(&payments).
+		Where("customer_id = ?", id).
+		Relation("Customer").
+		Relation("Merchant").
+		Relation("Bank").Scan(ctx.GetCtx())
+	if err != nil {
+		return nil, r.db.HandleDBError(ctx, "payments", database.Fetching, err)
+	}
+
+	if len(payments) == 0 {
+		return nil, apierrors.NewNotFoundApiError("no payments found")
+	}
+
+	return &payments, nil
 }

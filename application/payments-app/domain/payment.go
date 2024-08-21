@@ -41,8 +41,8 @@ func (p *PaymentRequest) Validate(ctx *domain.ContextInformation) apierrors.ApiE
 }
 
 var validBanksID = map[uint64]string{
-	0: "Santander",
-	1: "BBVA",
+	1: "Santander",
+	2: "BBVA",
 	3: "HSBC",
 }
 

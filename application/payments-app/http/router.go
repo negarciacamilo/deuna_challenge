@@ -37,6 +37,9 @@ func mapRoutes(router *gin.Engine) {
 	paymentsHandler := payment.NewHandler(paymentsService)
 
 	router.POST("/pay", paymentsHandler.Pay)
+	router.GET("/payments/:payment_id", paymentsHandler.GetPaymentByID)
+	router.GET("/customers/:customer_id/payments", paymentsHandler.GetCustomerPayments)
+	router.GET("/payments", paymentsHandler.GetAllPayments)
 	router.GET("/ping", ping)
 }
 
