@@ -42,15 +42,9 @@ func (s *service) Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) 
 	if apierr != nil {
 		code := s.bankRepository.ParseAPIError(apierr)
 		p.Code = code
-	}
-
-	if apierr != nil {
 		p.Status = defines.REJECTED_STATUS
-		err := s.paymentRepository.ChangePaymentStatus(ctx, *p)
-		if err != nil {
-			logger.Error("error changing payment status", "payment-service-pay", err, ctx)
-		}
-		return nil, apierr
+	} else {
+		p.PaymentID = paymentID
 	}
 
 	apierr = s.paymentRepository.AddPayment(ctx, p)

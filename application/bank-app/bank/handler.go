@@ -3,9 +3,11 @@ package bank
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/negarciacamilo/deuna_challenge/application/apierrors"
 	"github.com/negarciacamilo/deuna_challenge/application/context"
 	"github.com/negarciacamilo/deuna_challenge/application/defines"
+	"github.com/negarciacamilo/deuna_challenge/application/domain"
 	d "github.com/negarciacamilo/deuna_challenge/application/payments-app/domain"
 	"github.com/negarciacamilo/deuna_challenge/application/response"
 	"github.com/spf13/viper"
@@ -58,7 +60,8 @@ func (h *handler) Pay(c *gin.Context) {
 		return
 	}
 
-	response.Respond(ctx, response.New(200, nil), nil)
+	id, _ := uuid.NewV7()
+	response.Respond(ctx, response.New(200, domain.BankResponse{PaymentID: id.String()}), nil)
 }
 
 func (h *handler) PerformReversal(c *gin.Context) {

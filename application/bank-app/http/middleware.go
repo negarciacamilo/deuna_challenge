@@ -122,7 +122,7 @@ func logRequest(requestType string, elapsed int64, c *gin.Context, shouldLog boo
 				}
 
 				if c.Keys != nil && shouldLog {
-					logger.Error(OutcomingResponse, "outcoming-response", nil, ctx, tags)
+					logger.Info(OutcomingResponse, "outcoming-response", ctx, tags)
 					return
 				}
 			}

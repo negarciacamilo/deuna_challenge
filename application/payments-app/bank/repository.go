@@ -46,9 +46,9 @@ func (r *repository) Pay(ctx *d.ContextInformation, payment domain.PaymentReques
 		return nil, apierrors.NewApiError("can't perform the payment", apierr.Error(), res.StatusCode(), nil)
 	}
 
-	var paymentID string
-	_ = json.Unmarshal(res.Body(), &paymentID)
-	return &paymentID, nil
+	var bankResponse d.BankResponse
+	_ = json.Unmarshal(res.Body(), &bankResponse)
+	return &bankResponse.PaymentID, nil
 }
 
 func (r *repository) ReverseOperation(ctx *d.ContextInformation, paymentID string) apierrors.ApiError {
