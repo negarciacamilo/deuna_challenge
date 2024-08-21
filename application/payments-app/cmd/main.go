@@ -1,13 +1,13 @@
 package main
 
 import (
+	"github.com/negarciacamilo/deuna_challenge/application/environment"
 	"github.com/negarciacamilo/deuna_challenge/application/payments-app/http"
 	"github.com/spf13/viper"
-	"os"
 )
 
 func main() {
-	if env := os.Getenv("ENVIRONMENT"); env == "" {
+	if !environment.IsDockerEnv() {
 		viper.SetConfigFile("env.json")
 	} else {
 		viper.SetConfigFile("dockerenv.json")

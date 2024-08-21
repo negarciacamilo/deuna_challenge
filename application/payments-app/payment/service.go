@@ -63,7 +63,6 @@ func (s *service) Pay(ctx *d.ContextInformation, payment domain.PaymentRequest) 
 		if err != nil {
 			logger.Error("error changing payment status", "payment-service-pay", err, ctx)
 		}
-		return nil, apierr
 	}
 
 	return response.New(http.StatusCreated, p), nil
