@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: Payment API
+  description: DEUNA Challenge
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Payments server
+  - url: http://localhost:8888
+    description: Bank server
+
+tags:
+  - name: Payments
+
+paths:
+  /pay:
+    post:
+      summary: Create a new payment
+      description: Creates a new payment
+      tags:
+        - Payments
+      requestBody:
+        description: Payment request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      parameters:
+        - in: header
+          name: Authentication
+          schema:
+            type: string
+      responses:
+        201:
+          description: Payment created successfully
+        400:
+          description: Invalid request
+
+  /payments/{payment_id}:
+    parameters:
+      - in: path
+        name: payment_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: header
+        name: Authentication
+        schema:
+          type: string
+    get:
+      summary: Get a payment by ID
+      description: Retrieves a payment by its ID
+      tags:
+        - Payments
+      responses:
+        200:
+          description: Payment retrieved successfully
+        404:
+          description: Payment not found
+
+  /customers/{customer_id}/payments:
+    parameters:
+      - in: path
+        name: customer_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: header
+        name: Authentication
+        schema:
+          type: string
+    get:
+      summary: Get payments for a customer
+      description: Retrieves payments for a customer
+      tags:
+        - Payments
+      responses:
+        200:
+          description: Payments retrieved successfully
+        404:
+          description: Customer not found
+
+  /payments:
+    get:
+      parameters:
+        - in: header
+          name: Authentication
+          schema:
+            type: string
+      summary: Get all payments
+      description: Retrieves all payments
+      tags:
+        - Payments
+      responses:
+        200:
+          description: Payments retrieved successfully
+
+  /payments/{payment_id}/refund:
+    parameters:
+      - in: path
+        name: payment_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: header
+        name: Authentication
+        schema:
+          type: string
+    put:
+      summary: Refund a payment
+      description: Refunds a payment
+      tags:
+        - Payments
+      requestBody:
+        description: Refund request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        200:
+          description: Payment refunded successfully
+        400:
+          description: Invalid request
+
+components:
+  schemas:
+    PaymentRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+        merchant_id:
+          type: integer
+          format: int64
+        bank_id:
+          type: integer
+          format: int64
+        card_hash:
+          type: string
+      required:
+        - amount
+        - merchant_id
+        - bank_id
+        - card_hash
+
+    RefundRequest:
+      type: object
+      properties:
+        payment_id:
+          type: integer
+          format: int64
+      required:
+        - payment_id
