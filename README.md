@@ -29,10 +29,10 @@
             - [Payments](#payments)
               + [GET - /ping](#get-ping-1)
               + [POST - /pay ](#post-pay-1)
-                * [PUT - /payments/{payment_id}/refund](#put-paymentspayment_idrefund)
-                * [GET - /payments (fetch every payment)](#get-payments-fetch-every-payment)
-                * [GET - /payments/{payment_id} (fetch a given payment id)](#get-paymentspayment_id-fetch-a-given-payment-id)
-                * [GET - /customers/{customer_id}/payments (fetch every payment for a given customer)](#get-customerscustomer_idpayments-fetch-every-payment-for-a-given-customer)
+              + [PUT - /payments/{payment_id}/refund](#put-paymentspayment_idrefund)
+              + [GET - /payments (fetch every payment)](#get-payments-fetch-every-payment)
+              + [GET - /payments/{payment_id} (fetch a given payment id)](#get-paymentspayment_id-fetch-a-given-payment-id)
+              + [GET - /customers/{customer_id}/payments (fetch every payment for a given customer)](#get-customerscustomer_idpayments-fetch-every-payment-for-a-given-customer)
 
 # Building a Online Payment Platform
 
@@ -229,25 +229,25 @@ curl --location 'localhost:8080/pay' \
 }'
 ```
 
-##### PUT - /payments/{payment_id}/refund
+###### PUT - /payments/{payment_id}/refund
 ```curl
 curl --location --request PUT 'localhost:8080/payments/1/refund' \
 --header 'Authorization: user-token' \
 ```
 
-##### GET - /payments (fetch every payment)
+###### GET - /payments (fetch every payment)
 ```curl
 curl --location 'localhost:8080/payments' \
 --header 'Authorization: user-test'
 ```
 
-##### GET - /payments/{payment_id} (fetch a given payment id)
+###### GET - /payments/{payment_id} (fetch a given payment id)
 ```curl
 curl --location 'localhost:8080/payments/66' \
 --header 'Authorization: user-test'
 ```
 
-##### GET - /customers/{customer_id}/payments (fetch every payment for a given customer)
+###### GET - /customers/{customer_id}/payments (fetch every payment for a given customer)
 ```curl
 curl --location 'localhost:8080/customers/4/payments' \
 --header 'Authorization: user-test'
